@@ -497,7 +497,7 @@ function onUser(user) {
   const fb = FB.mod, col = fb.collection(FB.db, 'users', user.uid, 'data');
   Cloud.col = {
     doc: id => ({ set: body => fb.setDoc(fb.doc(col, id), body).catch(e => { throw { code: fbCode(e) }; }) }),
-    onSnapshot: (next, err) => fb.onSnapshot(col, s => next({ docs: s.docs.map(d => ({ id: d.id, data: () => d.data() })), metadata: s.metadata }), e => err({ code: fbCode(e) }))
+    onSnapshot: (next, err) => fb.onSnapshot(col, { includeMetadataChanges: true }, s => next({ docs: s.docs.map(d => ({ id: d.id, data: () => d.data() })), metadata: s.metadata }), e => err({ code: fbCode(e) }))
   };
   Cloud.mode = 'cloud'; ui.gate = false; ui.loading = isEmptyLocal();
   render(); updateStatus(); subscribeCloud();
